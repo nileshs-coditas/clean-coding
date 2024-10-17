@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import LocationInput from './components/LocationInput';
+import WeatherCard from './components/WeatherCard';
+import WeatherForecast from './components/WeatherForecast';
+import { useWeather } from './hooks/useWeather';
 
-function App() {
+const App: React.FC = () => {
+  const [location, setLocation] = useState('');
+  const { weatherData, error } = useWeather(location);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Weather Forecast App</h1>
+      <LocationInput onSubmit={setLocation} />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {weatherData && (
+        <>
+          <WeatherCard weather={weatherData.current} />
+          <WeatherForecast forecast={weatherData.forecast} />
+        </>
+      )}
     </div>
   );
-}
+};
 
 export default App;
